@@ -10,8 +10,7 @@
 
 / {
     behaviors {
-        // Home row mods — left hand. Hold triggers only when right-hand key is pressed
-        // (or on release). urob's "timeless" recipe: balanced + require-prior-idle.
+        // Home row mods — left hand. urob's "timeless" recipe: balanced + require-prior-idle.
         hml: hml {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -51,7 +50,7 @@
     };
 
     macros {
-        // Rust digraph macros for combo keys
+        // Rust digraph macros — triggered by combos on bottom-right row
         arrow: arrow {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -74,7 +73,7 @@
     combos {
         compatible = "zmk,combos";
 
-        // Bottom-right row rolls: N+M => "->"  |  M+, => "=>"  |  ,+. => "::"
+        // N+M => "->"  |  M+, => "=>"  |  ,+. => "::"
         combo_arrow {
             timeout-ms = <30>;
             key-positions = <44 45>;
@@ -98,82 +97,63 @@
         compatible = "zmk,keymap";
 
         default_layer {
-// ┌────────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬────────┐
-// │  ESC   │  1  │  2  │  3  │  4  │  5  │                 │  6  │  7  │  8  │  9  │  0  │   `    │
-// ├────────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼────────┤
-// │  TAB   │  Q  │  W  │  E  │  R  │  T  │                 │  Y  │  U  │  I  │  O  │  P  │   -    │
-// ├────────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼────────┤
-// │  CTRL  │GUI/A│ALT/S│CTL/D│SHF/F│  G  │                 │  H  │SHF/J│CTL/K│ALT/L│GUI/;│   '    │
-// ├────────┼─────┼─────┼─────┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼─────┼─────┼─────┼────────┤
-// │ SHIFT  │  Z  │  X  │  C  │  V  │  B  │  [  │   │  ]  │  N  │  M  │  ,  │  .  │  /  │ SHIFT  │
-// └────────┴─────┴─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┴─────┴────────┘
-//                      │ ESC │ GUI │ LWR │ SPC │   │ ENT │ RSE │BSPC │ GUI │
-//                      └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
+// -----------------------------------------------------------------------
+// | ESC  |  1  |  2  |  3  |  4  |  5  |       |  6  |  7  |  8  |  9  |  0  |  `  |
+// | TAB  |  Q  |  W  |  E  |  R  |  T  |       |  Y  |  U  |  I  |  O  |  P  |  -  |
+// | CTRL |GUI/A|ALT/S|CTL/D|SHF/F|  G  |       |  H  |SHF/J|CTL/K|ALT/L|GUI/;|  '  |
+// |      |  Z  |  X  |  C  |  V  |  B  |  [  | |  ]  |  N  |  M  |  ,  |  .  |  /  |      |
+//                    |LSHFT| GUI | LWR | SPC | | ENT | RSE |BSPC |RSHFT|
 //
-// HRMs — hold the key to activate the modifier, tap for the letter:
-//   Left:   A=GUI  S=Alt  D=Ctrl  F=Shift
-//   Right:  J=Shift  K=Ctrl  L=Alt  ;=GUI
-//
-// Combos (bottom-right row):
-//   N+M => "->"   M+, => "=>"   ,+. => "::"
+// HRMs (hold for mod, tap for letter): A=GUI  S=Alt  D=Ctrl  F=Shift  J=Shift  K=Ctrl  L=Alt  ;=GUI
+// Combos (bottom-right row): N+M => "->"   M+, => "=>"   ,+. => "::"
             bindings = <
 &kp ESC   &kp N1       &kp N2       &kp N3        &kp N4       &kp N5                           &kp N6 &kp N7        &kp N8        &kp N9       &kp N0          &kp GRAVE
 &kp TAB   &kp Q        &kp W        &kp E         &kp R        &kp T                            &kp Y  &kp U         &kp I         &kp O        &kp P           &kp MINUS
 &kp LCTRL &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F &kp G                            &kp H  &hmr RSHFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp SQT
-&kp LSHFT &kp Z        &kp X        &kp C         &kp V        &kp B  &kp LBKT     &kp RBKT     &kp N  &kp M         &kp COMMA     &kp DOT      &kp FSLH        &kp RSHFT
-                                    &kp ESC       &kp LGUI     &mo 1  &kp SPACE    &kp RET      &mo 2  &kp BSPC      &kp RGUI
+&trans    &kp Z        &kp X        &kp C         &kp V        &kp B  &kp LBKT     &kp RBKT     &kp N  &kp M         &kp COMMA     &kp DOT      &kp FSLH        &trans
+                                    &kp LSHFT     &kp LGUI     &mo 1  &kp SPACE    &kp RET      &mo 2  &kp BSPC      &kp RSHFT
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         lower_layer {
-// ┌────────┬──────┬──────┬──────┬──────┬──────┐               ┌──────┬──────┬──────┬──────┬──────┬──────┐
-// │ BTCLR  │ BT0  │ BT1  │ BT2  │ BT3  │ BT4  │               │      │      │      │      │      │      │
-// ├────────┼──────┼──────┼──────┼──────┼──────┤               ├──────┼──────┼──────┼──────┼──────┼──────┤
-// │   F1   │  F2  │  F3  │  F4  │  F5  │  F6  │               │  F7  │  F8  │  F9  │  F10 │  F11 │  F12 │
-// ├────────┼──────┼──────┼──────┼──────┼──────┤               ├──────┼──────┼──────┼──────┼──────┼──────┤
-// │   `    │  _   │  (   │  )   │  {   │  |   │               │  }   │  *   │  =   │  -   │  +   │  ~   │
-// ├────────┼──────┼──────┼──────┼──────┼──────┼──────┐ ┌──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-// │        │  !   │  [   │  ]   │  <   │  >   │      │ │      │      │  ^   │  @   │  #   │  $   │  \   │
-// └────────┴──────┴──────┼──────┼──────┼──────┼──────┤ ├──────┼──────┼──────┼──────┼──────┴──────┴──────┘
-//                        │      │      │ ///  │      │ │      │      │  %   │      │
-//                        └──────┴──────┴──────┴──────┘ └──────┴──────┴──────┴──────┘
+// -----------------------------------------------------------------------
+// | BTCLR| BT0 | BT1 | BT2 | BT3 | BT4 |       |     |     |     |     |     |     |
+// |  _   |  !  |  @  |  #  |  $  |  %  |       |  ^  |  &  |  *  |  (  |  )  |  ~  |
+// |  `   |  -  |  {  |  [  |  <  |  |  |       |  >  |  ]  |  }  |  =  |  +  |  \  |
+// |      |     |     |     |  ?  |     |     | |     |     |     |     |     |     |      |
+//                    |     |     | /// |     | |     |     |     |     |
 //
-// Symbol layout optimised for Rust:
-//   Home row: _ ( ) { | } * = - + ~   (inward rolls for parens and braces)
-//   Bottom:   ! [ ] < >   ^  @  #  $  BSLH
+// Row 2: shifted-number mirror -- lower + N = shift(N) for every number key
+// Row 3: brackets paired across center (open left, close right); ops on edges
             bindings = <
-&bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                   &trans     &trans     &trans     &trans    &trans    &trans
-&kp F1     &kp F2       &kp F3       &kp F4       &kp F5       &kp F6                           &kp F7     &kp F8     &kp F9     &kp F10   &kp F11   &kp F12
-&kp GRAVE  &kp UNDER    &kp LPAR     &kp RPAR     &kp LBRC     &kp PIPE                         &kp RBRC   &kp ASTRK  &kp EQUAL  &kp MINUS &kp PLUS  &kp TILDE
-&trans     &kp EXCL     &kp LBKT     &kp RBKT     &kp LT       &kp GT    &trans     &trans      &trans     &kp CARET  &kp AT     &kp HASH  &kp DLLR  &kp BSLH
-                                     &trans       &trans       &trans    &trans     &trans       &trans     &kp PRCNT  &trans
+&bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                   &trans    &trans    &trans    &trans    &trans    &trans
+&kp UNDER  &kp EXCL     &kp AT       &kp HASH      &kp DOLLAR   &kp PRCNT                       &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp TILDE
+&kp GRAVE  &kp MINUS    &kp LBRC     &kp LBKT      &kp LT       &kp PIPE                        &kp GT    &kp RBKT  &kp RBRC  &kp EQUAL &kp PLUS  &kp BSLH
+&trans     &trans       &trans       &trans        &kp QMARK    &trans  &trans     &trans        &trans    &trans    &trans    &trans    &trans    &trans
+                                     &trans        &trans       &trans  &trans     &trans        &trans    &trans    &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         raise_layer {
-// ┌────────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬──────┐
-// │ STUDIO │     │     │     │     │     │                 │     │     │     │     │     │      │
-// ├────────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-// │   `    │  1  │  2  │  3  │  4  │  5  │                 │  6  │  7  │  8  │  9  │  0  │      │
-// ├────────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-// │   F1   │  F2 │  F3 │  F4 │  F5 │  F6 │                 │     │  ←  │  ↓  │  ↑  │  →  │      │
-// ├────────┼─────┼─────┼─────┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼─────┼─────┼─────┼──────┤
-// │   F7   │  F8 │  F9 │ F10 │ F11 │ F12 │     │   │     │  +  │  -  │  =  │  [  │  ]  │  \   │
-// └────────┴─────┴─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┴─────┴──────┘
-//                      │     │     │     │     │   │     │ /// │     │     │
-//                      └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
+// -----------------------------------------------------------------------
+// |STUDIO|     |     |     |     |     |       |     |     |     |     |     |     |
+// |      | UNDO| CUT |COPY |PASTE|REDO |       |PGUP |PGDN |HOME | END | INS |     |
+// |      | GUI | ALT |CTRL |SHFT |     |       |  <- |  v  |  ^  |  -> | DEL |     |
+// |      |     |     |     |     |     |     | |     |     |     |     |     |     |      |
+//                    |     |     |     |     | |     | /// |     |     |
 //
-// Hold RAISE+ESC (top-left) to unlock ZMK Studio.
+// Left home row = direct modifiers for one-handed nav chords (e.g. Shift+arrow, Cmd+arrow)
+// Right side = HJKL navigation + page/home/end on row above
             bindings = <
-&studio_unlock &trans &trans &trans  &trans  &trans                          &trans      &trans    &trans    &trans   &trans    &trans
-&kp GRAVE      &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                          &kp N6      &kp N7    &kp N8    &kp N9   &kp N0    &trans
-&kp F1         &kp F2 &kp F3 &kp F4  &kp F5  &kp F6                          &trans      &kp LEFT  &kp DOWN  &kp UP   &kp RIGHT &trans
-&kp F7         &kp F8 &kp F9 &kp F10 &kp F11 &kp F12   &trans     &trans     &kp KP_PLUS &kp MINUS &kp EQUAL &kp LBKT &kp RBKT  &kp BSLH
-                              &trans  &trans  &trans    &trans     &trans     &trans      &trans    &trans
+&studio_unlock &trans    &trans    &trans     &trans     &trans                                  &trans    &trans    &trans   &trans    &trans   &trans
+&trans         &kp LG(Z) &kp LG(X) &kp LG(C)  &kp LG(V)  &kp LS(LG(Z))                         &kp PG_UP &kp PG_DN &kp HOME &kp END   &kp INS  &trans
+&trans         &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &trans                                 &kp LEFT  &kp DOWN  &kp UP   &kp RIGHT &kp DEL  &trans
+&trans         &trans    &trans    &trans     &trans     &trans  &trans     &trans               &trans    &trans    &trans   &trans    &trans   &trans
+                                   &trans     &trans     &trans  &trans     &trans               &trans    &trans    &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
