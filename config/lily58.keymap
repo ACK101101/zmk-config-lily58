@@ -97,41 +97,52 @@
         compatible = "zmk,keymap";
 
         default_layer {
-// -----------------------------------------------------------------------
-// | ESC  |  1  |  2  |  3  |  4  |  5  |       |  6  |  7  |  8  |  9  |  0  |  `  |
-// | TAB  |  Q  |  W  |  E  |  R  |  T  |       |  Y  |  U  |  I  |  O  |  P  |  -  |
-// | CTRL |GUI/A|ALT/S|CTL/D|SHF/F|  G  |       |  H  |SHF/J|CTL/K|ALT/L|GUI/;|  '  |
-// |      |  Z  |  X  |  C  |  V  |  B  |  [  | |  ]  |  N  |  M  |  ,  |  .  |  /  |      |
-//                    |LSHFT| GUI | LWR | SPC | | ENT | RSE |BSPC |RSHFT|
+// ┌───────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬───────┐
+// │  ESC  │  1  │  2  │  3  │  4  │  5  │                 │  6  │  7  │  8  │  9  │  0  │   `   │
+// ├───────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼───────┤
+// │  TAB  │  Q  │  W  │  E  │  R  │  T  │                 │  Y  │  U  │  I  │  O  │  P  │   -   │
+// ├───────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼───────┤
+// │ CTRL  │GUI/A│ALT/S│CTL/D│SHF/F│  G  │                 │  H  │SHF/J│CTL/K│ALT/L│GUI/;│   '   │
+// ├───────┼─────┼─────┼─────┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼─────┼─────┼─────┼───────┤
+// │ CAPS  │  Z  │  X  │  C  │  V  │  B  │  [  │   │  ]  │  N  │  M  │  ,  │  .  │  /  │ KRPT  │
+// └───────┴─────┴─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┴─────┴───────┘
+//                     │LSHFT│ GUI │ LWR │ SPC │   │ ENT │ RSE │BSPC │RSHFT│
+//                     └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
 //
-// HRMs (hold for mod, tap for letter): A=GUI  S=Alt  D=Ctrl  F=Shift  J=Shift  K=Ctrl  L=Alt  ;=GUI
-// Combos (bottom-right row): N+M => "->"   M+, => "=>"   ,+. => "::"
+// HRMs (hold = mod, tap = letter): A=GUI  S=Alt  D=Ctrl  F=Shift  |  J=Shift  K=Ctrl  L=Alt  ;=GUI
+// CAPS = caps_word (hold for ALL_CAPS until non-alpha)   KRPT = key_repeat
+// Combos (bottom-right): N+M => "->"   M+, => "=>"   ,+. => "::"
             bindings = <
-&kp ESC   &kp N1       &kp N2       &kp N3        &kp N4       &kp N5                           &kp N6 &kp N7        &kp N8        &kp N9       &kp N0          &kp GRAVE
-&kp TAB   &kp Q        &kp W        &kp E         &kp R        &kp T                            &kp Y  &kp U         &kp I         &kp O        &kp P           &kp MINUS
-&kp LCTRL &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F &kp G                            &kp H  &hmr RSHFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp SQT
-&trans    &kp Z        &kp X        &kp C         &kp V        &kp B  &kp LBKT     &kp RBKT     &kp N  &kp M         &kp COMMA     &kp DOT      &kp FSLH        &trans
-                                    &kp LSHFT     &kp LGUI     &mo 1  &kp SPACE    &kp RET      &mo 2  &kp BSPC      &kp RSHFT
+&kp ESC    &kp N1       &kp N2       &kp N3        &kp N4       &kp N5                           &kp N6 &kp N7        &kp N8        &kp N9       &kp N0          &kp GRAVE
+&kp TAB    &kp Q        &kp W        &kp E         &kp R        &kp T                            &kp Y  &kp U         &kp I         &kp O        &kp P           &kp MINUS
+&kp LCTRL  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F &kp G                            &kp H  &hmr RSHFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp SQT
+&caps_word &kp Z        &kp X        &kp C         &kp V        &kp B  &kp LBKT     &kp RBKT     &kp N  &kp M         &kp COMMA     &kp DOT      &kp FSLH        &key_repeat
+                                     &kp LSHFT     &kp LGUI     &mo 1  &kp SPACE    &kp RET      &mo 2  &kp BSPC      &kp RSHFT
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         lower_layer {
-// -----------------------------------------------------------------------
-// | BTCLR| BT0 | BT1 | BT2 | BT3 | BT4 |       |     |     |     |     |     |     |
-// |  _   |  !  |  @  |  #  |  $  |  %  |       |  ^  |  &  |  *  |  (  |  )  |  ~  |
-// |  `   |  -  |  {  |  [  |  <  |  |  |       |  >  |  ]  |  }  |  =  |  +  |  \  |
-// |      |     |     |     |  ?  |     |     | |     |     |     |     |     |     |      |
-//                    |     |     | /// |     | |     |     |     |     |
+// ┌───────┬──────┬──────┬──────┬──────┬──────┐                 ┌──────┬──────┬──────┬──────┬──────┬───────┐
+// │ BTCLR │ BT0  │ BT1  │ BT2  │ BT3  │ BT4  │                 │      │      │      │      │      │       │
+// ├───────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────┼──────┼──────┼──────┼───────┤
+// │   _   │  !   │  @   │  #   │  $   │  %   │                 │  ^   │  &   │  *   │  (   │  )   │   ~   │
+// ├───────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────┼──────┼──────┼──────┼───────┤
+// │   `   │  -   │  {   │  [   │  <   │  |   │                 │  >   │  ]   │  }   │  =   │  +   │   \   │
+// ├───────┼──────┼──────┼──────┼──────┼──────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼──────┼───────┤
+// │       │      │      │      │      │      │      │   │      │      │      │      │      │      │       │
+// └───────┴──────┴──────┼──────┼──────┼──────┼──────┤   ├──────┼──────┼──────┼──────┼──────┴──────┴───────┘
+//                       │      │      │ ///  │      │   │      │      │      │      │
+//                       └──────┴──────┴──────┴──────┘   └──────┴──────┴──────┴──────┘
 //
-// Row 2: shifted-number mirror -- lower + N = shift(N) for every number key
-// Row 3: brackets paired across center (open left, close right); ops on edges
+// Row 2: lower + number key = its shifted symbol (same column, _ under ESC, ~ under `)
+// Row 3: bracket pairs mirrored across center — open left (ring/mid/idx), close right (idx/mid/ring)
             bindings = <
 &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                   &trans    &trans    &trans    &trans    &trans    &trans
 &kp UNDER  &kp EXCL     &kp AT       &kp HASH      &kp DOLLAR   &kp PRCNT                       &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp TILDE
 &kp GRAVE  &kp MINUS    &kp LBRC     &kp LBKT      &kp LT       &kp PIPE                        &kp GT    &kp RBKT  &kp RBRC  &kp EQUAL &kp PLUS  &kp BSLH
-&trans     &trans       &trans       &trans        &kp QMARK    &trans  &trans     &trans        &trans    &trans    &trans    &trans    &trans    &trans
+&trans     &trans       &trans       &trans        &trans       &trans  &trans     &trans        &trans    &trans    &trans    &trans    &trans    &trans
                                      &trans        &trans       &trans  &trans     &trans        &trans    &trans    &trans
             >;
 
@@ -139,20 +150,26 @@
         };
 
         raise_layer {
-// -----------------------------------------------------------------------
-// |STUDIO|     |     |     |     |     |       |     |     |     |     |     |     |
-// |      | UNDO| CUT |COPY |PASTE|REDO |       |PGUP |PGDN |HOME | END | INS |     |
-// |      | GUI | ALT |CTRL |SHFT |     |       |  <- |  v  |  ^  |  -> | DEL |     |
-// |      |     |     |     |     |     |     | |     |     |     |     |     |     |      |
-//                    |     |     |     |     | |     | /// |     |     |
+// ┌───────┬──────┬──────┬──────┬──────┬──────┐                 ┌──────┬──────┬──────┬──────┬──────┬───────┐
+// │STUDIO │      │      │      │      │      │                 │      │      │      │      │      │       │
+// ├───────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────┼──────┼──────┼──────┼───────┤
+// │       │ UNDO │ CUT  │ COPY │PASTE │ REDO │                 │ PGUP │ PGDN │ HOME │ END  │ INS  │       │
+// ├───────┼──────┼──────┼──────┼──────┼──────┤                 ├──────┼──────┼──────┼──────┼──────┼───────┤
+// │       │ GUI  │ ALT  │ CTRL │ SHFT │      │                 │  <-  │  v   │  ^   │  ->  │ DEL  │       │
+// ├───────┼──────┼──────┼──────┼──────┼──────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼──────┼───────┤
+// │       │  F1  │  F2  │  F3  │  F4  │  F5  │  F6  │   │  F7  │  F8  │  F9  │ F10  │ F11  │ F12  │       │
+// └───────┴──────┴──────┼──────┼──────┼──────┼──────┤   ├──────┼──────┼──────┼──────┼──────┴──────┴───────┘
+//                       │      │      │      │      │   │      │ ///  │      │      │
+//                       └──────┴──────┴──────┴──────┘   └──────┴──────┴──────┴──────┘
 //
-// Left home row = direct modifiers for one-handed nav chords (e.g. Shift+arrow, Cmd+arrow)
-// Right side = HJKL navigation + page/home/end on row above
+// Left row 2: macOS edit shortcuts (Cmd+Z/X/C/V, Cmd+Shift+Z)
+// Left home row: direct mods for one-handed nav chords (e.g. Shift+arrow, Cmd+arrow)
+// Right: arrows on home row, PgUp/PgDn/Home/End above, F1-F12 on row 4
             bindings = <
 &studio_unlock &trans    &trans    &trans     &trans     &trans                                  &trans    &trans    &trans   &trans    &trans   &trans
 &trans         &kp LG(Z) &kp LG(X) &kp LG(C)  &kp LG(V)  &kp LS(LG(Z))                         &kp PG_UP &kp PG_DN &kp HOME &kp END   &kp INS  &trans
 &trans         &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &trans                                 &kp LEFT  &kp DOWN  &kp UP   &kp RIGHT &kp DEL  &trans
-&trans         &trans    &trans    &trans     &trans     &trans  &trans     &trans               &trans    &trans    &trans   &trans    &trans   &trans
+&trans         &kp F1    &kp F2    &kp F3     &kp F4     &kp F5  &kp F6     &kp F7              &kp F8    &kp F9    &kp F10  &kp F11   &kp F12  &trans
                                    &trans     &trans     &trans  &trans     &trans               &trans    &trans    &trans
             >;
 
